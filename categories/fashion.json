@@ -21,7 +21,7 @@
       "phone"
     ],
     "code": "const { regular, serif, icons } = await loadFonts();\n  const { name, slogan, phone } = brandData;\n  const scale = getScale(width, height);\n\n  const cardW = width * 0.9;\n  const cardH = 220 * scale;\n  const cardX = (width - cardW) / 2;\n  const cardY = height - cardH - (60 * scale);\n\n  const paint = Skia.Paint();\n  \n  // 1. Glass Card Background\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.95)'));\n  canvas.drawRRect(Skia.RRectXY({x: cardX, y: cardY, width: cardW, height: cardH}, 40*scale, 40*scale), paint);\n\n  // 2. Elegant Serif Title\n  paint.setColor(Skia.Color('#1A1A1A'));\n  const titleFont = serif;\n  titleFont.setSize(60 * scale);\n  drawTextCentered(canvas, name, cardY + 80 * scale, titleFont, paint, width);\n\n  // 3. Slogan\n  const sFont = regular;\n  sFont.setSize(28 * scale);\n  paint.setColor(Skia.Color('#666666'));\n  if (slogan) drawTextCentered(canvas, slogan, cardY + 130 * scale, sFont, paint, width);\n\n  // 4. WhatsApp Contact (Floating Pill)\n  paint.setColor(Skia.Color('#075E54'));\n  const pillW = 300 * scale;\n  canvas.drawRRect(Skia.RRectXY({x: (width - pillW)/2, y: cardY + 160*scale, width: pillW, height: 50*scale}, 25*scale, 25*scale), paint);\n  \n  paint.setColor(Skia.Color('white'));\n  const phFont = regular;\n  phFont.setSize(24 * scale);\n  drawTextCentered(canvas, `Chat: ${phone}`, cardY + 195 * scale, phFont, paint, width);\n\n  return [\"name\", \"slogan\", \"phone\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeLuxe",
@@ -33,7 +33,7 @@
       "logoUri"
     ],
     "code": "const { regular, bold, serif } = await loadFonts();\n  const { name, slogan, logo } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Subtle dark gradient from bottom (0% to 40% opacity black)\n  const paint = Skia.Paint();\n  const colors = [Skia.Color('transparent'), Skia.Color('#000000dd')];\n  const pos = [0, 1];\n  const shader = Skia.Shader.MakeLinearGradient(\n    { x: 0, y: height - (500 * scale) },\n    { x: 0, y: height },\n    colors,\n    pos,\n    0\n  );\n  paint.setShader(shader);\n  canvas.drawRect({ x: 0, y: height - (500 * scale), width, height: 500 * scale }, paint);\n  paint.setShader(null); // Reset shader\n\n  // 2. Draw Logo if available (Centered above text)\n  let textStartY = height - (150 * scale);\n  if (logo) {\n    const logoSize = 120 * scale;\n    const { width: lW, height: lH } = getLogoDimensions(logo);\n    const aspectRatio = lH / lW;\n    const logoWeight = logoSize;\n    const logoHeight = logoSize * aspectRatio;\n    // Center logo\n    drawLogo(canvas, logo, (width / 2) - (logoWeight / 2), textStartY - logoHeight - (70 * scale), logoWeight, logoHeight);\n  }\n\n  // 3. Brand Name in Gold Serif\n  const goldColor = Skia.Color('#D4AF37');\n  paint.setColor(goldColor);\n  const serifFont = serif;\n  serifFont.setSize(60 * scale);\n  // Draw text centered\n  drawTextCentered(canvas, name, textStartY, serifFont, paint, width);\n\n  // 4. Slogan in White Sans-Serif (tracked out/spaced) - using bold font but smaller\n  if (slogan) {\n    paint.setColor(Skia.Color('white'));\n    const sansFont = regular; // Modern Inter looks better than legacy bold\n    sansFont.setSize(22 * scale);\n    drawTextCentered(canvas, slogan.toUpperCase().split('').join(' '), textStartY + (50 * scale), sansFont, paint, width);\n  }\n\n  //RETURN REQUIRED BRAND INFO\n  return [\"name\", \"slogan\", \"logoUri\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeVogue",
@@ -45,7 +45,7 @@
       "logoUri"
     ],
     "code": "const { serif, regular } = await loadFonts();\n    const { name, slogan, logo } = brandData;\n    const scale = getScale(width, height);\n\n    // 1. Overlay (Subtle dark fade at bottom for readability)\n    const paint = Skia.Paint();\n    const colors = [Skia.Color('transparent'), Skia.Color('rgba(0,0,0,0.6)')];\n    const shader = Skia.Shader.MakeLinearGradient(\n        { x: 0, y: height - (400 * scale) },\n        { x: 0, y: height },\n        colors, [0, 1], 0\n    );\n    paint.setShader(shader);\n    canvas.drawRect({ x: 0, y: height - (400 * scale), width, height: 400 * scale }, paint);\n    paint.setShader(null);\n\n    // 2. \"VOGUE\" Style Title (Centered, Massive, Serif)\n    paint.setColor(Skia.Color('white'));\n    const titleFont = serif;\n    titleFont.setSize(85 * scale); // Huge\n    \n    // Draw Title near bottom\n    const titleY = height - (140 * scale);\n    drawTextCentered(canvas, name.toUpperCase(), titleY, titleFont, paint, width);\n\n    // 3. Slogan / Subtitle (Spaced out Sans Serif)\n    if (slogan) {\n        const subFont = regular;\n        subFont.setSize(24 * scale);\n        // tracking/letter-spacing simulated by adding spaces or drawing manually? \n        // Skia Font doesn't strictly support letter spacing easily yet without manual glyph positioning.\n        // We'll just stick to standard rendering for now but make it small and clean.\n        drawTextCentered(canvas, slogan.toUpperCase(), titleY + (50 * scale), subFont, paint, width);\n    }\n    \n    // 4. Logo (Top Center, Small & Elegant)\n    if (logo) {\n         const logoSize = 80 * scale;\n         const { width: lW, height: lH } = getLogoDimensions(logo);\n         const ar = lH / lW;\n         const finalH = logoSize * ar;\n         // Draw Top Center\n         drawLogo(canvas, logo, (width/2) - (logoSize/2), 60 * scale, logoSize, finalH);\n    }\n\n    return [\"name\", \"slogan\", \"logoUri\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeBrushed",
@@ -56,7 +56,7 @@
       "logoUri"
     ],
     "code": "const { regular, bold, script } = await loadFonts();\n    const { name, logo } = brandData;\n    const scale = getScale(width, height);\n  \n    // Logo Top Left\n    if (logo) {\n        const logoSize = 120 * scale;\n        const { width: logoW, height: logoH } = getLogoDimensions(logo);\n        const aspectRatio = logoH / logoW;\n        \n        drawLogo(canvas, logo, 30 * scale, 30 * scale, logoSize, logoSize * aspectRatio);\n    }\n\n    // Simulate Brush Stroke (Jagged Rect)\n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('#000000'));\n    paint.setAlphaf(0.7);\n    \n    const path = Skia.Path.Make();\n    const startY = height - (160 * scale);\n    path.moveTo(0, startY + (10*scale));\n    path.lineTo(width, startY);\n    path.lineTo(width, height - (40*scale));\n    path.lineTo(0, height - (20*scale));\n    path.close();\n    \n    canvas.drawPath(path, paint);\n  \n    paint.setColor(Skia.Color('white'));\n    paint.setAlphaf(1);\n    \n    const titleFont = script;\n    titleFont.setSize(70 * scale);\n    drawTextCentered(canvas, name, height - (70 * scale), titleFont, paint, width);\n\n    //RETURN REQUIRED BRAND INFO\n    return [\"name\", \"logoUri\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeMagazine",
@@ -68,7 +68,7 @@
       "logoUri"
     ],
     "code": "const { regular, bold, serif } = await loadFonts();\n    const { name, slogan, logo } = brandData;\n    const scale = getScale(width, height);\n  \n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('white'));\n    \n    // Logo Top Right\n    if (logo) {\n        const logoSize = 100 * scale;\n        const { width: lW, height: lH } = getLogoDimensions(logo);\n        const aspectRatio = lH / lW;\n        drawLogo(canvas, logo, width - logoSize - (30 * scale), 30 * scale, logoSize, logoSize * aspectRatio);\n    }\n\n    // Vertical Text\n    canvas.save();\n    canvas.translate(80 * scale, height - (100 * scale));\n    canvas.rotate(-90, 0, 0);\n    \n    const volumeFont = regular;\n    volumeFont.setSize(24 * scale);\n    drawTextLeft(canvas, \"VOL. 01\", 0, -40 * scale, volumeFont, paint, 200 * scale);\n    \n    const titleFont = serif;\n    titleFont.setSize(80 * scale);\n    drawTextLeft(canvas, name.toUpperCase(), 0, 0, titleFont, paint, height - 200 * scale);\n    \n    if (slogan) {\n        const sloganFont = regular;\n        sloganFont.setSize(30 * scale);\n        drawTextLeft(canvas, slogan.toUpperCase(), 0, 50 * scale, sloganFont, paint, height - 200 * scale);\n    }\n    \n    canvas.restore();\n\n    //RETURN REQUIRED BRAND INFO\n    return [\"name\", \"slogan\", \"logoUri\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeSalonLuxe",
@@ -79,6 +79,6 @@
       "slogan"
     ],
     "code": "const { serif, regular } = await loadFonts();\n  const { name, slogan } = brandData;\n  const scale = getScale(width, height);\n\n  // Vertical Sidebar Left (Pink/Nude)\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#F8BBD0')); \n  const sideW = 120 * scale;\n  canvas.drawRect({ x: 0, y: 0, width: sideW, height }, paint);\n\n  // Vertical Text\n  paint.setColor(Skia.Color('black'));\n  const titleFont = serif;\n  titleFont.setSize(60 * scale);\n\n  canvas.save();\n  canvas.translate(70 * scale, height / 2);\n  canvas.rotate(-90, 0, 0);\n  drawTextLeft(canvas, name.toUpperCase(), -200*scale, 0, titleFont, paint, width - (40 * scale));\n  canvas.restore();\n\n  // Bottom Box\n  paint.setColor(Skia.Color('white'));\n  paint.setAlphaf(0.8);\n  canvas.drawRect({ x: sideW, y: height - 150*scale, width: width - sideW, height: 150*scale }, paint);\n  \n  paint.setAlphaf(1);\n  const sFont = regular;\n  sFont.setSize(26 * scale);\n  if (slogan) drawTextLeft(canvas, slogan, sideW + 40*scale, height - 60*scale, sFont, paint, width - (40 * scale));\n\n  return [\"name\", \"slogan\"];",
-    "isPremium": true
+    "isPremium": false
   }
 ]

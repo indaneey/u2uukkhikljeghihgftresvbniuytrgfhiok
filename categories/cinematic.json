@@ -21,6 +21,6 @@
       "slogan"
     ],
     "code": "const { condensed, regular } = await loadFonts();\n    const { name, slogan } = brandData;\n    const scale = getScale(width, height);\n\n    // 1. Cinema Bars (Letterbox)\n    const barH = 100 * scale;\n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('black'));\n    canvas.drawRect({ x: 0, y: 0, width, height: barH }, paint);\n    canvas.drawRect({ x: 0, y: height - barH, width, height: barH }, paint);\n\n    // 2. Grain / Texture (Optional simulation using noise shader? Skip for performance)\n\n    // 3. Text (Minimalist, Bottom Left in the bar or just above it)\n    paint.setColor(Skia.Color('white'));\n    const titleFont = condensed;\n    titleFont.setSize(40 * scale);\n    \n    // Draw \"Presents\" or similar if we wanted, but sticking to Brand Name\n    // Creating a \"Title Card\" look\n    const textY = height - (barH / 2) + (15 * scale); // Vertically centered in bottom bar\n    \n    // Left aligned in bottom bar\n    drawTextLeft(canvas, name.toUpperCase(), 40 * scale, textY, titleFont, paint, width - (40 * scale));\n\n    // Slogan on Right aligned\n    if (slogan) {\n        const subFont = regular;\n        subFont.setSize(24 * scale);\n        const subW = subFont.getTextWidth(slogan.toUpperCase());\n        drawTextLeft(canvas, slogan.toUpperCase(), width - subW - (40 * scale), textY, subFont, paint, width - (40 * scale));\n    }\n    \n    return [\"name\", \"slogan\"];",
-    "isPremium": true
+    "isPremium": false
   }
 ]

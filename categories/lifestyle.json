@@ -18,7 +18,7 @@
       "socialMedia"
     ],
     "code": "const { regular, bold, icons } = await loadFonts();\n    const { name, socialMedia } = brandData;\n    const scale = getScale(width, height);\n\n    // Gradient Backdrop for text visibility\n    const paint = Skia.Paint();\n    const colors = [Skia.Color('transparent'), Skia.Color('rgba(0,0,0,0.8)')];\n    const shader = Skia.Shader.MakeLinearGradient(\n      { x: 0, y: height - (300 * scale) },\n      { x: 0, y: height },\n      colors, [0, 1], 0\n    );\n    paint.setShader(shader);\n    canvas.drawRect({ x: 0, y: height - (300 * scale), width, height: 300 * scale }, paint);\n    paint.setShader(null);\n\n    // Center Name\n    paint.setColor(Skia.Color('white'));\n    const nameFont = bold;\n    nameFont.setSize(60 * scale);\n    drawTextCentered(canvas, `@${name.replace(/\\s/g, '').toLowerCase()}`, height - (150 * scale), nameFont, paint, width);\n\n    // Social Row\n    const socials = [\n        { icon: 'logo-instagram', value: socialMedia?.instagram },\n        { icon: 'logo-tiktok', value: socialMedia?.tiktok },\n        { icon: 'logo-youtube', value: socialMedia?.facebook }, // Fallback FB to YT icon or just use FB\n        { icon: 'logo-twitter', value: socialMedia?.twitter },\n    ];\n    \n    const validSocials = socials.filter(s => s.value);\n    const iconSize = 40 * scale;\n    const gap = 60 * scale;\n    const totalW = (validSocials.length * iconSize) + ((validSocials.length - 1) * gap);\n    let startX = (width - totalW) / 2;\n    const startY = height - (80 * scale);\n\n    validSocials.forEach(s => {\n        paint.setColor(Skia.Color('white'));\n        drawIcon(canvas, s.icon, startX, startY, iconSize, paint, icons);\n        startX += iconSize + gap;\n    });\n\n    return [\"name\", \"socialMedia\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeViral",
@@ -29,7 +29,7 @@
       "name"
     ],
     "code": "const { bold, regular, icons } = await loadFonts();\n  const { name, socialMedia } = brandData;\n  const scale = getScale(width, height);\n\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n\n  // Floating Capsule for Handle\n  const handle = `@${(socialMedia?.instagram || name).replace(/\\s/g, '')}`;\n  const font = bold;\n  font.setSize(32 * scale);\n  const textW = font.getTextWidth(handle);\n\n  // Glass background\n  paint.setColor(Skia.Color('rgba(0,0,0,0.4)'));\n  canvas.drawRRect(Skia.RRectXY({x: 40*scale, y: height - 250*scale, width: textW + 100*scale, height: 70*scale}, 35*scale, 35*scale), paint);\n\n  // Icon and Text\n  paint.setColor(Skia.Color('white'));\n  drawIcon(canvas, 'logo-instagram', 65*scale, height - 235*scale, 30*scale, paint, icons);\n  drawTextLeft(canvas, handle, 110*scale, height - 203*scale, font, paint, width - (40 * scale));\n\n  return [\"socialMedia\", \"name\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeGallery",
@@ -39,8 +39,8 @@
       "name",
       "slogan"
     ],
-    "code": "const { regular, serif } = await loadFonts();\n  const { name, slogan } = brandData;\n  const scale = getScale(width, height);\n  const inset = 80 * scale;\n\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  \n  // Draw Thick Gallery Frame\n  paint.setStyle(1); // Stroke\n  paint.setStrokeWidth(inset * 2);\n  canvas.drawRect({ x: 0, y: 0, width, height }, paint);\n\n  // Fine Print at Bottom Center\n  paint.setStyle(0); // Fill\n  paint.setColor(Skia.Color('#1a1a1a'));\n  const font = serif;\n  font.setSize(24 * scale);\n  const meta = `${name}  •  ${slogan || 'Fine Art Series'}`;\n  drawTextCentered(canvas, meta, height - (inset / 2), font, paint, width);\n\n  return [\"name\", \"slogan\"];",
-    "isPremium": true
+    "code": "const { regular, serif } = await loadFonts();\n  const { name, slogan } = brandData;\n  const scale = getScale(width, height);\n  const inset = 80 * scale;\n\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  \n  // Draw Thick Gallery Frame\n  paint.setStyle(1); // Stroke\n  paint.setStrokeWidth(inset * 2);\n  canvas.drawRect({ x: 0, y: 0, width, height }, paint);\n\n  // Fine Print at Bottom Center\n  paint.setStyle(0); // Fill\n  paint.setColor(Skia.Color('#1a1a1a'));\n  const font = serif;\n  font.setSize(24 * scale);\n  const meta = `${name}  \u2022  ${slogan || 'Fine Art Series'}`;\n  drawTextCentered(canvas, meta, height - (inset / 2), font, paint, width);\n\n  return [\"name\", \"slogan\"];",
+    "isPremium": false
   },
   {
     "id": "themeSocialFocus",
@@ -53,7 +53,7 @@
       "logoUri"
     ],
     "code": "const { regular, bold, icons } = await loadFonts();\n    const { name, socialMedia, logo, phone } = brandData;\n    const scale = getScale(width, height);\n\n    // 1. Bottom Drawer\n    const drawerHeight = 250 * scale;\n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('white'));\n    canvas.drawRect({ x: 0, y: height - drawerHeight, width, height: drawerHeight }, paint);\n\n    // 2. Brand Name\n    paint.setColor(Skia.Color('black'));\n    const nameFont = bold;\n    nameFont.setSize(50 * scale);\n    drawTextLeft(canvas, name, 50 * scale, height - drawerHeight + (80 * scale), nameFont, paint, width - (40 * scale));\n\n    // 3. Social Icons\n    const iconSize = 40 * scale;\n    const infoFont = regular;\n    infoFont.setSize(25 * scale);\n    let currentX = 50 * scale;\n    const startY = height - drawerHeight + (150 * scale);\n    const gap = 30 * scale;\n\n    const socials = [\n        { icon: 'logo-instagram', value: socialMedia?.instagram, label: 'Insta' },\n        { icon: 'logo-tiktok', value: socialMedia?.tiktok, label: 'TikTok' },\n        { icon: 'logo-whatsapp', value: phone, label: 'WhatsApp' },\n    ];\n\n    socials.forEach(s => {\n        if (s.value) {\n            // Draw Icon\n            paint.setColor(Skia.Color('black'));\n            drawIcon(canvas, s.icon, currentX, startY, iconSize, paint, icons);\n            \n            // Draw Handle\n            const textX = currentX + iconSize + (10 * scale);\n            const displayVal = s.label === 'WhatsApp' ? s.value : `@${s.value.replace(/^@/, '')}`; // Ensure @ for handles\n            canvas.drawText(displayVal, textX, startY + iconSize - (5 * scale), paint, infoFont);\n            \n            // Move X\n            const textW = infoFont.getTextWidth(displayVal);\n            currentX += iconSize + (10 * scale) + textW + gap;\n        }\n    });\n\n    // Logo (Floating above drawer right)\n    if (logo) {\n        const logoSize = 160 * scale;\n        const { width: logoW, height: logoH } = getLogoDimensions(logo);\n        const aspectRatio = logoH / logoW;\n        drawLogo(canvas, logo, width - logoSize - (50 * scale), height - drawerHeight - (logoSize * aspectRatio / 2), logoSize, logoSize * aspectRatio);\n    }\n    \n    return [\"name\", \"socialMedia\", \"phone\", \"logoUri\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeReviewCard",
@@ -63,7 +63,7 @@
       "name"
     ],
     "code": "const { regular, bold, icons } = await loadFonts();\n  const { name } = brandData;\n  const scale = getScale(width, height);\n\n  // Card Bottom\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  const cardH = 300 * scale;\n  canvas.drawRRect(Skia.RRectXY({x: 40*scale, y: height - cardH - 50*scale, width: width - 80*scale, height: cardH}, 30*scale, 30*scale), paint);\n\n  // 5 Stars\n  paint.setColor(Skia.Color('#FFD700'));\n  let sx = 80 * scale;\n  const sy = height - cardH + 20 * scale;\n  for(let i=0; i<5; i++) {\n      drawIcon(canvas, 'star', sx, sy, 40*scale, paint, icons);\n      sx += 50 * scale;\n  }\n\n  // Text\n  paint.setColor(Skia.Color('black'));\n  const font = bold;\n  font.setSize(35 * scale);\n  canvas.drawText(\"Highly Recommended!\", 80*scale, sy + 80*scale, paint, font);\n  \n  const sub = regular;\n  sub.setSize(24 * scale);\n  paint.setColor(Skia.Color('#666'));\n  drawTextLeft(canvas, `@${name} - Verified Vendor`, 80*scale, sy + 130*scale, sub, paint, width - (40 * scale));\n\n  return [\"name\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeChatPopup",
@@ -73,7 +73,7 @@
       "phone"
     ],
     "code": "const { regular, bold, icons } = await loadFonts();\n  const { phone } = brandData;\n  const scale = getScale(width, height);\n\n  // Message Bubble Top Right\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#007AFF')); // Messenger Blue\n  const bW = 400 * scale;\n  const bH = 120 * scale;\n  const bX = width - bW - 40*scale;\n  const bY = 200 * scale;\n  \n  canvas.drawRRect(Skia.RRectXY({x: bX, y: bY, width: bW, height: bH}, 30*scale, 30*scale), paint);\n  \n  // Triangle tail\n  const path = Skia.Path.Make();\n  path.moveTo(bX + bW - 40*scale, bY + bH);\n  path.lineTo(bX + bW - 20*scale, bY + bH + 30*scale);\n  path.lineTo(bX + bW - 80*scale, bY + bH);\n  path.close();\n  canvas.drawPath(path, paint);\n\n  // Text\n  paint.setColor(Skia.Color('white'));\n  const f = bold;\n  f.setSize(30 * scale);\n  canvas.drawText(\"DM for Price!\", bX + 40*scale, bY + 70*scale, paint, f);\n\n  // WhatsApp Button Bottom\n  paint.setColor(Skia.Color('#25D366'));\n  canvas.drawRRect(Skia.RRectXY({x: (width-400*scale)/2, y: height - 150*scale, width: 400*scale, height: 100*scale}, 50*scale, 50*scale), paint);\n  \n  paint.setColor(Skia.Color('white'));\n  drawIcon(canvas, 'logo-whatsapp', width/2 - 100*scale, height - 115*scale, 40*scale, paint, icons);\n  canvas.drawText(\"Chat Now\", width/2 - 40*scale, height - 90*scale, paint, f);\n\n  return [\"phone\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeStoryFrame",
@@ -84,7 +84,7 @@
       "logoUri"
     ],
     "code": "const { regular, bold, icons } = await loadFonts();\n    const { name, logo } = brandData;\n    const scale = getScale(width, height);\n\n    const border = 30 * scale;\n    const paint = Skia.Paint();\n    \n    // Gradient Border\n    const colors = [Skia.Color('#f09433'), Skia.Color('#bc1888')]; // Insta colors\n    const shader = Skia.Shader.MakeLinearGradient({x:0, y:0}, {x:width, y:height}, colors, [0,1], 0);\n    paint.setShader(shader);\n    paint.setStyle(1); // Stroke\n    paint.setStrokeWidth(border);\n    \n    canvas.drawRect({x: border/2, y: border/2, width: width-border, height: height-border}, paint);\n    paint.setShader(null);\n\n    // Header Pill\n    paint.setStyle(0); // Fill\n    paint.setColor(Skia.Color('white'));\n    const pillW = 400 * scale;\n    const pillH = 100 * scale;\n    canvas.drawRRect(Skia.RRectXY({x: (width-pillW)/2, y: 60*scale, width: pillW, height: pillH}, 50*scale, 50*scale), paint);\n\n    // Logo & Name\n    paint.setColor(Skia.Color('black'));\n    const f = bold;\n    f.setSize(35 * scale);\n    \n    if (logo) {\n        const lSize = 70 * scale;\n        const { width: lW, height: lH } = getLogoDimensions(logo);\n        drawLogo(canvas, logo, (width-pillW)/2 + 20*scale, 75*scale, lSize, lSize * (lH/lW));\n        drawTextLeft(canvas, name, (width-pillW)/2 + 110*scale, 125*scale, f, paint, width - (40 * scale));\n    } else {\n        drawTextCentered(canvas, name, 125*scale, f, paint, width);\n    }\n\n    return [\"name\", \"logoUri\"];",
-    "isPremium": true
+    "isPremium": false
   },
   {
     "id": "themeVerified",
@@ -94,6 +94,6 @@
       "name"
     ],
     "code": "const { bold, icons } = await loadFonts();\n    const { name } = brandData;\n    const scale = getScale(width, height);\n\n    // Blue Badge Top Right\n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('#1DA1F2'));\n    const size = 150 * scale;\n    const x = width - size - 20*scale;\n    const y = 20*scale;\n    \n    // Draw Seal (Circle)\n    canvas.drawCircle(x + size/2, y + size/2, size/2, paint);\n    \n    // Checkmark\n    paint.setColor(Skia.Color('white'));\n    drawIcon(canvas, 'checkmark', x + 35*scale, y + 25*scale, 80*scale, paint, icons);\n\n    // \"TRUSTED\"\n    const f = bold;\n    f.setSize(20 * scale);\n    const tw = f.getTextWidth(\"TRUSTED\");\n    canvas.drawText(\"TRUSTED\", x + (size-tw)/2, y + 110*scale, paint, f);\n\n    return [\"name\"];",
-    "isPremium": true
+    "isPremium": false
   }
 ]
