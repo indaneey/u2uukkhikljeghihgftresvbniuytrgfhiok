@@ -22,11 +22,6 @@
       "file": "categories/cinematic.json"
     },
     {
-      "id": "tech",
-      "name": "Tech",
-      "file": "categories/tech.json"
-    },
-    {
       "id": "lifestyle",
       "name": "Lifestyle",
       "file": "categories/lifestyle.json"
