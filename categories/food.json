@@ -1,0 +1,24 @@
+[
+  {
+    "id": "themeDailyMenu",
+    "name": "Daily Menu",
+    "type": "code",
+    "requiredFields": [
+      "phone",
+      "address",
+      "logoUri"
+    ],
+    "code": "const { regular, bold, script, icons } = await loadFonts();\n  const { name, phone, address, logo } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Chalkboard / Dark Background Header\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#1F1F1F'));\n  canvas.drawRect({ x: 0, y: 0, width, height: 160 * scale }, paint);\n\n  // 2. Title \"TODAY'S SPECIAL\"\n  paint.setColor(Skia.Color('#FFA500')); // Orange\n  const titleFont = script;\n  titleFont.setSize(70 * scale);\n  drawTextCentered(canvas, \"Today's Special\", 100 * scale, titleFont, paint, width);\n\n  // 3. Floating Footer for Order Info\n  const footerH = 140 * scale;\n  paint.setColor(Skia.Color('white'));\n  canvas.drawRect({ x: 0, y: height - footerH, width, height: footerH }, paint);\n\n  // 4. Contact Details\n  paint.setColor(Skia.Color('black'));\n  const contactFont = bold;\n  contactFont.setSize(30 * scale);\n  \n  // Phone (Left) with Icon\n  drawIcon(canvas, 'call', 40 * scale, height - 90 * scale, 35 * scale, paint, icons);\n  drawTextLeft(canvas, phone, 90 * scale, height - 60 * scale, contactFont, paint, width - (40 * scale));\n\n  // Address (Right)\n  const addrFont = regular;\n  addrFont.setSize(26 * scale);\n  const addrText = address ? address.substring(0, 25) : name;\n  const addrW = addrFont.getTextWidth(addrText);\n  \n  drawIcon(canvas, 'restaurant', width - addrW - 90 * scale, height - 90 * scale, 35 * scale, paint, icons);\n  drawTextLeft(canvas, addrText, width - addrW - 40 * scale, height - 60 * scale, addrFont, paint, width - (40 * scale));\n\n  // Logo Overlay (Top Left)\n  if (logo) {\n      const lSize = 100 * scale;\n      const { width: lW, height: lH } = getLogoDimensions(logo);\n      drawLogo(canvas, logo, 20 * scale, 20 * scale, lSize, lSize * (lH/lW));\n  }\n\n  return [\"phone\", \"address\", \"logoUri\"];",
+    "isPremium": false
+  },
+  {
+    "id": "themeCoffeeBreak",
+    "name": "Coffee Break",
+    "type": "code",
+    "requiredFields": [
+      "address"
+    ],
+    "code": "const { condensed, bold, icons } = await loadFonts();\n  const { name, address } = brandData;\n  const scale = getScale(width, height);\n\n  // Circular Badge Bottom Right\n  const circleSize = 250 * scale;\n  const cx = width - (150 * scale);\n  const cy = height - (150 * scale);\n\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#3E2723')); // Coffee Brown\n  canvas.drawCircle(cx, cy, circleSize / 2, paint);\n\n  // Inner Ring\n  paint.setStyle(1); // Stroke\n  paint.setStrokeWidth(5 * scale);\n  paint.setColor(Skia.Color('#D7CCC8'));\n  canvas.drawCircle(cx, cy, (circleSize / 2) - (15*scale), paint);\n\n  // Text inside circle\n  paint.setStyle(0); // Fill\n  paint.setColor(Skia.Color('white'));\n  const font = condensed;\n  font.setSize(40 * scale);\n  const w1 = font.getTextWidth(\"FRESH\");\n  canvas.drawText(\"FRESH\", cx - (w1/2), cy - (20*scale), paint, font);\n  \n  const w2 = font.getTextWidth(\"DAILY\");\n  canvas.drawText(\"DAILY\", cx - (w2/2), cy + (20*scale), paint, font);\n\n  // Address Bar Bottom Left\n  paint.setColor(Skia.Color('white'));\n  const barW = width - (200 * scale); // Stop before circle\n  canvas.drawRect({x: 0, y: height - 100*scale, width: barW, height: 100*scale}, paint);\n  \n  paint.setColor(Skia.Color('#3E2723'));\n  const addrFont = bold;\n  addrFont.setSize(28 * scale);\n  if (address) {\n      drawIcon(canvas, 'location', 30*scale, height - 65*scale, 30*scale, paint, icons);\n      drawTextLeft(canvas, address, 70*scale, height - 40*scale, addrFont, paint, width - (40 * scale));\n  }\n\n  return [\"address\"];",
+    "isPremium": true
+  }
+]

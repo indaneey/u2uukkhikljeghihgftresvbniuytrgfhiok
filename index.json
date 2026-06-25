@@ -1,0 +1,45 @@
+{
+  "version": "1.0.0",
+  "categories": [
+    {
+      "id": "retail",
+      "name": "Retail",
+      "file": "categories/retail.json"
+    },
+    {
+      "id": "fashion",
+      "name": "Fashion",
+      "file": "categories/fashion.json"
+    },
+    {
+      "id": "corporate",
+      "name": "Corporate",
+      "file": "categories/corporate.json"
+    },
+    {
+      "id": "cinematic",
+      "name": "Cinematic",
+      "file": "categories/cinematic.json"
+    },
+    {
+      "id": "tech",
+      "name": "Tech",
+      "file": "categories/tech.json"
+    },
+    {
+      "id": "lifestyle",
+      "name": "Lifestyle",
+      "file": "categories/lifestyle.json"
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "file": "categories/marketing.json"
+    },
+    {
+      "id": "food",
+      "name": "Food",
+      "file": "categories/food.json"
+    }
+  ]
+}

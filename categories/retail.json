@@ -1,0 +1,113 @@
+[
+  {
+    "id": "themeRetail",
+    "name": "Retail",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "phone"
+    ],
+    "code": "const {regular, bold, condensed} = await loadFonts();\n  const {name, phone} = brandData;\n  const scale = getScale(width, height);\n  const footerHeight = 140 * scale;\n  \n  // Black Bar\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('black'));\n  canvas.drawRect({ x: 0, y: height - footerHeight, width, height: footerHeight }, paint);\n\n  \n  // Yellow Line Top of Bar\n  paint.setColor(Skia.Color('#FFD700')); // Gold\n  canvas.drawRect({ x: 0, y: height - footerHeight, width, height: 10 * scale }, paint);\n\n  const titleFont = condensed\n  titleFont.setSize(60 * scale)\n  const regularFont = regular\n  regularFont.setSize(35 * scale)\n\n  // Text White\n  paint.setColor(Skia.Color('white'));\n  drawTextCentered(canvas, name.toUpperCase(), height - (70 * scale), titleFont, paint, width);\n  \n  // Phone smaller below\n  paint.setColor(Skia.Color('#CCCCCC'));\n  drawTextCentered(canvas, phone, height - (30 * scale), regularFont, paint, width);\n\n  //RETURN REQUIRED BRAND INFO\n  return [\"name\", \"phone\"];",
+    "isPremium": false
+  },
+  {
+    "id": "themeBoldRetail",
+    "name": "Bold Retail",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "address",
+      "phone"
+    ],
+    "code": "const { bold, regular, icons } = await loadFonts();\n  const { name, phone, address } = brandData;\n  const scale = getScale(width, height);\n\n  const paint = Skia.Paint();\n  \n  // 1. Bottom Dark Gradient\n  const colors = [Skia.Color('transparent'), Skia.Color('black')];\n  paint.setShader(Skia.Shader.MakeLinearGradient({ x: 0, y: height - 500*scale }, { x: 0, y: height }, colors, [0, 1], 0));\n  canvas.drawRect({ x: 0, y: height - 500*scale, width, height: 500*scale }, paint);\n  paint.setShader(null);\n\n  // 2. Large Brand Name\n  paint.setColor(Skia.Color('white'));\n  const titleFont = bold;\n  titleFont.setSize(80 * scale);\n  drawTextLeft(canvas, name.toUpperCase(), 40 * scale, height - 220 * scale, titleFont, paint, width - (40 * scale));\n\n  // 3. Address with Icon\n  const addrFont = regular;\n  addrFont.setSize(34 * scale);\n  paint.setColor(Skia.Color('#FFD700')); // Gold\n  \n  if (address) {\n    // Icon: Location\n    drawIcon(canvas, 'location', 35 * scale, height - 160 * scale, 36 * scale, paint, icons);\n    drawTextLeft(canvas, address, 85 * scale, height - 128 * scale, addrFont, paint, width - (40 * scale));\n  }\n\n  // 4. WhatsApp Call-to-Action Bar\n  const barH = 100 * scale;\n  const barY = height - 100 * scale;\n  paint.setColor(Skia.Color('#25D366')); // WhatsApp Green\n  const rrect = Skia.RRectXY({x: 30*scale, y: barY, width: width - 60*scale, height: barH}, 20*scale, 20*scale);\n  canvas.drawRRect(rrect, paint);\n  \n  // Icon: WhatsApp Logo inside bar\n  paint.setColor(Skia.Color('white'));\n  drawIcon(canvas, 'logo-whatsapp', 60 * scale, barY + (20*scale), 55 * scale, paint, icons);\n\n  const phoneFont = bold;\n  phoneFont.setSize(50 * scale);\n  drawTextLeft(canvas, `ORDER: ${phone}`, 140 * scale, barY + (68 * scale), phoneFont, paint, width - (40 * scale));\n\n  return [\"name\", \"address\", \"phone\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeModernShop",
+    "name": "Modern Shop",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "address",
+      "phone"
+    ],
+    "code": "const { condensed, regular, icons } = await loadFonts();\n  const { name, address, phone } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Shop Name (Giant)\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  // Shadow for text\n  const shadow = Skia.Paint();\n  shadow.setColor(Skia.Color('black'));\n  shadow.setAlphaf(0.5);\n\n  const nFont = condensed;\n  nFont.setSize(110 * scale); // Huge\n  \n  // Draw Shadow then Text\n  const titleY = height - 250 * scale;\n  drawTextCentered(canvas, name.toUpperCase(), titleY + 4, nFont, shadow, width);\n  drawTextCentered(canvas, name.toUpperCase(), titleY, nFont, paint, width);\n\n  // 2. Info Footer Bar\n  const barH = 140 * scale;\n  paint.setColor(Skia.Color('rgba(0,0,0,0.85)'));\n  canvas.drawRect({ x: 0, y: height - barH, width, height: barH }, paint);\n\n  paint.setColor(Skia.Color('white'));\n  const infoFont = regular;\n  infoFont.setSize(30 * scale);\n  \n  // Left Side: Address with PIN icon\n  if (address) {\n     drawIcon(canvas, 'location', 40 * scale, height - 90 * scale, 40 * scale, paint, icons);\n     // Truncate address if needed or just draw\n     canvas.drawText(address.substring(0, 20), 90 * scale, height - 55 * scale, paint, infoFont);\n  }\n\n  // Right Side: Phone with CALL icon\n  // Calculate width to align right\n  const phText = phone;\n  const phWidth = infoFont.getTextWidth(phText);\n  const phX = width - phWidth - 40 * scale;\n  \n  // Icon: Call\n  drawIcon(canvas, 'call', phX - 50 * scale, height - 90 * scale, 40 * scale, paint, icons);\n  drawTextLeft(canvas, phText, phX, height - 55 * scale, infoFont, paint, width - (40 * scale));\n\n  return [\"name\", \"address\", \"phone\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeEComm",
+    "name": "E Comm",
+    "type": "code",
+    "requiredFields": [
+      "logoUri",
+      "website"
+    ],
+    "code": "const { regular, bold, icons } = await loadFonts();\n  const { name, logo, website } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Subtle Glass Header\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  paint.setAlphaf(0.8);\n  canvas.drawRect({ x: 0, y: 0, width, height: 120 * scale }, paint);\n\n  // 2. Logo (Top Left)\n  if (logo) {\n    const logoSize = 80 * scale;\n    const { width: lW, height: lH } = getLogoDimensions(logo);\n    drawLogo(canvas, logo, 30 * scale, 20 * scale, logoSize, logoSize * (lH / lW));\n  }\n\n  // 3. Price/Action Badge (Top Right)\n  paint.setColor(Skia.Color('#000000'));\n  const badgeW = 200 * scale;\n  const badgeH = 60 * scale;\n  canvas.drawRRect(Skia.RRectXY({x: width - badgeW - 30*scale, y: 30*scale, width: badgeW, height: badgeH}, 30*scale, 30*scale), paint);\n  \n  paint.setColor(Skia.Color('white'));\n  const font = bold;\n  font.setSize(24 * scale);\n  canvas.drawText(\"SHOP NOW\", width - badgeW + 20*scale, 70*scale, paint, font);\n\n  // 4. Footer URL\n  paint.setColor(Skia.Color('#555555'));\n  const urlFont = regular;\n  urlFont.setSize(28 * scale);\n  if (website) drawTextCentered(canvas, website.toLowerCase(), height - 40*scale, urlFont, paint, width);\n\n  return [\"logoUri\", \"website\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeCatalog",
+    "name": "Catalog",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "phone",
+      "website"
+    ],
+    "code": "const { regular, icons } = await loadFonts();\n  const { name, phone, website } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Semi-transparent dark footer\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('rgba(0,0,0,0.7)'));\n  const footerH = 160 * scale;\n  canvas.drawRect({ x: 0, y: height - footerH, width, height: footerH }, paint);\n\n  // 2. Contact Grid (Two Columns)\n  paint.setColor(Skia.Color('white'));\n  const font = regular;\n  font.setSize(28 * scale);\n  \n  // WhatsApp Row\n  drawIcon(canvas, 'logo-whatsapp', 50 * scale, height - 120 * scale, 30 * scale, paint, icons);\n  drawTextLeft(canvas, phone, 100 * scale, height - 95 * scale, font, paint, width - (40 * scale));\n\n  // Website Row (if exists)\n  if (website) {\n    drawIcon(canvas, 'globe-outline', 50 * scale, height - 60 * scale, 30 * scale, paint, icons);\n    drawTextLeft(canvas, website.replace('https://', ''), 100 * scale, height - 35 * scale, font, paint, width - (40 * scale));\n  }\n\n  // Brand Name (Right Aligned)\n  const nameFont = regular;\n  nameFont.setSize(32 * scale);\n  const nameW = nameFont.getTextWidth(name);\n  drawTextLeft(canvas, name, width - nameW - 50 * scale, height - 85 * scale, nameFont, paint, width - (40 * scale));\n\n  return [\"name\", \"phone\", \"website\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeStoreLocator",
+    "name": "Store Locator",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "address"
+    ],
+    "code": "const { regular, bold, icons, condensed } = await loadFonts();\n  const { name, address, website } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Location Bar (Bottom)\n  const barH = 180 * scale;\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  canvas.drawRect({ x: 0, y: height - barH, width, height: barH }, paint);\n\n  // 2. \"Find Us\" Accent\n  paint.setColor(Skia.Color('#EF4444')); // Location Red\n  const accentH = 40 * scale;\n  canvas.drawRect({ x: 0, y: height - barH, width: 120 * scale, height: accentH }, paint);\n  \n  paint.setColor(Skia.Color('white'));\n  const findFont = bold;\n  findFont.setSize(18 * scale);\n  canvas.drawText(\"VISIT US\", 20 * scale, height - barH + (28 * scale), paint, findFont);\n\n  // 3. Address Text\n  paint.setColor(Skia.Color('#1F2937'));\n  const addrFont = regular;\n  addrFont.setSize(30 * scale);\n  \n  if (address) {\n    drawIcon(canvas, 'location', 40 * scale, height - 100 * scale, 35 * scale, paint, icons);\n    // Draw address with wrapping logic ideally, but here as single line\n    drawTextLeft(canvas, address, 90 * scale, height - 72 * scale, addrFont, paint, width - (40 * scale));\n  }\n\n  // 4. Shop Name (Right Aligned)\n  const shopFont = condensed;\n  shopFont.setSize(50 * scale);\n  const nameW = shopFont.getTextWidth(name.toUpperCase());\n  drawTextLeft(canvas, name.toUpperCase(), width - nameW - 40 * scale, height - 90 * scale, shopFont, paint, width - (40 * scale));\n\n  return [\"name\", \"address\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeFlashSale",
+    "name": "Flash Sale",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "phone"
+    ],
+    "code": "const { bold, condensed, icons } = await loadFonts();\n  const { name, phone } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Slanted Ribbon Top Left\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#D50000')); // Red\n  \n  const path = Skia.Path.Make();\n  path.moveTo(0, 0);\n  path.lineTo(300 * scale, 0);\n  path.lineTo(0, 300 * scale);\n  path.close();\n  canvas.drawPath(path, paint);\n\n  paint.setColor(Skia.Color('white'));\n  const saleFont = condensed;\n  saleFont.setSize(45 * scale);\n  \n  canvas.save();\n  canvas.rotate(-45, 100*scale, 100*scale);\n  canvas.drawText(\"SALE\", 20*scale, 140*scale, paint, saleFont);\n  canvas.restore();\n\n  // 2. Bottom Bar\n  paint.setColor(Skia.Color('#D50000'));\n  canvas.drawRect({ x: 0, y: height - 120*scale, width, height: 120*scale }, paint);\n\n  // 3. Order Info\n  paint.setColor(Skia.Color('white'));\n  const phoneFont = bold;\n  phoneFont.setSize(50 * scale);\n  \n  drawIcon(canvas, 'logo-whatsapp', 50*scale, height - 85*scale, 45*scale, paint, icons);\n  drawTextLeft(canvas, phone, 110*scale, height - 45*scale, phoneFont, paint, width - (40 * scale));\n\n  // Brand Name Right\n  const nameFont = condensed;\n  nameFont.setSize(35 * scale);\n  const nw = nameFont.getTextWidth(name.toUpperCase());\n  drawTextLeft(canvas, name.toUpperCase(), width - nw - 40*scale, height - 50*scale, nameFont, paint, width - (40 * scale));\n\n  return [\"name\", \"phone\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeProductDrop",
+    "name": "Product Drop",
+    "type": "code",
+    "requiredFields": [
+      "logoUri"
+    ],
+    "code": "const { regular, bold } = await loadFonts();\n  const { name, logo } = brandData;\n  const scale = getScale(width, height);\n\n  // \"NEW ARRIVAL\" Badge floating center bottom\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('white'));\n  \n  const badgeW = 400 * scale;\n  const badgeH = 100 * scale;\n  const badgeX = (width - badgeW) / 2;\n  const badgeY = height - 150 * scale;\n  \n  canvas.drawRRect(Skia.RRectXY({x: badgeX, y: badgeY, width: badgeW, height: badgeH}, 50*scale, 50*scale), paint);\n\n  // Text\n  paint.setColor(Skia.Color('black'));\n  const font = bold;\n  font.setSize(32 * scale);\n  const text = \"NEW ARRIVAL\";\n  const tw = font.getTextWidth(text);\n  canvas.drawText(text, badgeX + (badgeW - tw)/2, badgeY + 60*scale, paint, font);\n\n  // Logo top center\n  if (logo) {\n      const lSize = 120 * scale;\n      const { width: lW, height: lH } = getLogoDimensions(logo);\n      drawLogo(canvas, logo, (width - lSize)/2, 50*scale, lSize, lSize * (lH/lW));\n  }\n\n  return [\"logoUri\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themePriceTag",
+    "name": "Price Tag",
+    "type": "code",
+    "requiredFields": [
+      "phone"
+    ],
+    "code": "const { bold, regular, icons } = await loadFonts();\n  const { name, phone } = brandData;\n  const scale = getScale(width, height);\n\n  // Simulated Tag Shape on Right\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#FFD700')); // Gold Tag\n  \n  const tagW = 280 * scale;\n  const tagH = 120 * scale;\n  const tagX = width - tagW - 20*scale;\n  const tagY = height - 300 * scale;\n\n  // Tag Body\n  const path = Skia.Path.Make();\n  path.moveTo(tagX, tagY);\n  path.lineTo(tagX + tagW, tagY);\n  path.lineTo(tagX + tagW, tagY + tagH);\n  path.lineTo(tagX, tagY + tagH);\n  path.lineTo(tagX - 40*scale, tagY + (tagH/2)); // Pointy bit\n  path.close();\n  \n  // Shadow\n  paint.setColor(Skia.Color('rgba(0,0,0,0.5)'));\n  canvas.drawPath(path, paint); // Lazy shadow (draws over same path slightly offset would be better, but this darkens it)\n  \n  // Real Tag\n  paint.setColor(Skia.Color('#FFD700'));\n  canvas.drawPath(path, paint);\n\n  // Text \"BEST PRICE\"\n  paint.setColor(Skia.Color('black'));\n  const tagFont = bold;\n  tagFont.setSize(30 * scale);\n  canvas.drawText(\"BEST PRICE\", tagX + 20*scale, tagY + 70*scale, paint, tagFont);\n\n  // Bottom Info\n  paint.setColor(Skia.Color('black'));\n  canvas.drawRect({ x: 0, y: height - 100*scale, width, height: 100*scale }, paint);\n  \n  paint.setColor(Skia.Color('white'));\n  drawIcon(canvas, 'call', 50*scale, height - 70*scale, 30*scale, paint, icons);\n  drawTextLeft(canvas, `Call to Order: ${phone}`, 100*scale, height - 40*scale, tagFont, paint, width - (40 * scale));\n\n  return [\"phone\"];",
+    "isPremium": true
+  },
+  {
+    "id": "themeGridShowcase",
+    "name": "Grid Showcase",
+    "type": "code",
+    "requiredFields": [
+      "logoUri",
+      "name"
+    ],
+    "code": "const { bold, regular } = await loadFonts();\n    const { name, logo } = brandData;\n    const scale = getScale(width, height);\n\n    // Draw white grid lines over photo to simulate collage\n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('white'));\n    paint.setStrokeWidth(10 * scale);\n    paint.setStyle(1); // Stroke\n    \n    // Cross\n    canvas.drawLine(width/2, 0, width/2, height, paint);\n    canvas.drawLine(0, height/2, width, height/2, paint);\n\n    // Center Badge\n    paint.setStyle(0); // Fill\n    canvas.drawCircle(width/2, height/2, 100*scale, paint);\n\n    // Logo in center\n    if (logo) {\n        const lSize = 120 * scale;\n        const { width: lW, height: lH } = getLogoDimensions(logo);\n        drawLogo(canvas, logo, (width-lSize)/2, (height-lSize)/2, lSize, lSize * (lH/lW));\n    }\n\n    // Name at bottom\n    paint.setColor(Skia.Color('black'));\n    const f = bold;\n    f.setSize(40 * scale);\n    drawTextCentered(canvas, name.toUpperCase(), height - 50*scale, f, paint, width);\n\n    return [\"logoUri\", \"name\"];",
+    "isPremium": true
+  }
+]
