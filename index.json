@@ -35,6 +35,11 @@
       "id": "food",
       "name": "Food",
       "file": "categories/food.json"
+    },
+    {
+      "id": "watermark",
+      "name": "Watermark",
+      "file": "categories/watermark.json"
     }
   ]
 }

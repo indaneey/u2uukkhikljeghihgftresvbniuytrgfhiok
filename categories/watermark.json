@@ -1,0 +1,131 @@
+[
+    {
+        "id": "themeCornerMinimalBadge",
+        "name": "Corner Minimal Badge",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "website"
+        ],
+        "code": "const { oswald, regular } = await loadFonts();\nconst { name, website } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst boxW = 320 * scale;\nconst boxH = 110 * scale;\nconst bx = 40 * scale;\nconst by = height - boxH - (40 * scale);\n\n// Premium glass blur backdrop layout protection\npaint.setColor(Skia.Color('rgba(10, 10, 12, 0.75)'));\ncanvas.drawRRect(Skia.RRectXY({ x: bx, y: by, width: boxW, height: boxH }, 16 * scale, 16 * scale), paint);\n\npaint.setColor(Skia.Color('#D4AF37')); // Champagne Gold accent pin\ncanvas.drawCircle(bx + (25 * scale), by + (25 * scale), 4 * scale, paint);\n\npaint.setColor(Skia.Color('white'));\nconst titleFont = oswald;\ntitleFont.setSize(34 * scale); // Punchy scannable sizing\drawTextLeft(canvas, name.toUpperCase(), bx + (45 * scale), by + (55 * scale), titleFont, paint, boxW - (60 * scale));\n\nif (website) {\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.5)'));\n  const subFont = regular;\n  subFont.setSize(18 * scale);\n  drawTextLeft(canvas, website.toLowerCase(), bx + (45 * scale), by + (85 * scale), subFont, paint, boxW - (60 * scale));\n}\nreturn [\"name\", \"website\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeProGridOverlay",
+        "name": "Pro Grid Overlay",
+        "type": "code",
+        "requiredFields": [
+            "name"
+        ],
+        "code": "const { condensed } = await loadFonts();\nconst { name } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\npaint.setColor(Skia.Color('rgba(255, 255, 255, 0.15)'));\nconst titleFont = condensed;\ntitleFont.setSize(55 * scale); // Prominent watermark pattern scale\n\n// Strategic diagonal background matrix duplication to prevent content piracy\nfor (let i = 0; i < 2; i++) {\n  for (let j = 0; j < 3; j++) {\n    canvas.save();\n    const x = (width / 2) * i + (60 * scale);\n    const y = (height / 3) * j + (120 * scale);\n    canvas.translate(x, y);\n    canvas.rotate(-25, 0, 0);\n    drawTextLeft(canvas, name.toUpperCase(), 0, 0, titleFont, paint, width / 2);\n    canvas.restore();\n  }\n}\nreturn [\"name\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeLowerAccentStrip",
+        "name": "Lower Accent Strip",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "socialHandle"
+        ],
+        "code": "const { bold, roboto, icons } = await loadFonts();\nconst { name, socialHandle } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst stripH = 90 * scale;\npaint.setColor(Skia.Color('rgba(15, 17, 23, 0.85)'));\ncanvas.drawRect({ x: 0, y: height - stripH, width, height: stripH }, paint);\n\npaint.setColor(Skia.Color('white'));\nconst titleFont = bold;\ntitleFont.setSize(34 * scale);\ndrawTextLeft(canvas, name, 40 * scale, height - (stripH / 2) + (11 * scale), titleFont, paint, width * 0.5);\n\nif (socialHandle) {\n  const pillW = 240 * scale;\n  const pillH = 46 * scale;\n  const pillX = width - pillW - (40 * scale);\n  const pillY = height - (stripH / 2) - (pillH / 2);\n  \n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.12)'));\n  canvas.drawRRect(Skia.RRectXY({ x: pillX, y: pillY, width: pillW, height: pillH }, 23 * scale, 23 * scale), paint);\n  \n  paint.setColor(Skia.Color('white'));\n  const subFont = roboto;\n  subFont.setSize(20 * scale);\n  drawIcon(canvas, 'logo-instagram', pillX + 20 * scale, pillY + 11 * scale, 24 * scale, paint, icons);\n  drawTextCentered(canvas, socialHandle.toLowerCase(), pillY + 31 * scale, subFont, paint, width, pillW - 40 * scale);\n}\nreturn [\"name\", \"socialHandle\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeLuxuryStampLabel",
+        "name": "Luxury Stamp Label",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "phone"
+        ],
+        "code": "const { condensed, regular } = await loadFonts();\nconst { name, phone } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\ncanvas.save();\ncanvas.translate(width - (220 * scale), 120 * scale);\ncanvas.rotate(-12, 0, 0);\n\npaint.setStyle(1);\npaint.setStrokeWidth(3 * scale);\npaint.setColor(Skia.Color('rgba(212, 175, 55, 0.75)')); // Metallic gold tone\n\nconst boxW = 320 * scale;\nconst boxH = 110 * scale;\ncanvas.drawRect({ x: -boxW/2, y: -boxH/2, width: boxW, height: boxH }, paint);\n\npaint.setStyle(0);\nconst titleFont = condensed;\ntitleFont.setSize(48 * scale); // Loud crisp layout size\nconst tw = titleFont.getTextWidth(name.toUpperCase());\ndrawTextLeft(canvas, name.toUpperCase(), -tw / 2, 8 * scale, titleFont, paint, boxW - (20 * scale));\n\nif (phone) {\n  const subFont = regular;\n  subFont.setSize(18 * scale);\n  const pw = subFont.getTextWidth(phone);\n  drawTextLeft(canvas, phone, -pw / 2, (boxH / 2) - (12 * scale), subFont, paint, boxW);\n}\ncanvas.restore();\nreturn [\"name\", \"phone\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeMonoBranding",
+        "name": "Mono Studio Branding",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "email"
+        ],
+        "code": "const { oswald, regular } = await loadFonts();\nconst { name, email } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst h = 130 * scale;\npaint.setColor(Skia.Color('rgba(0, 0, 0, 0.9)'));\ncanvas.drawRect({ x: 40 * scale, y: height - h - (40 * scale), width: width - (80 * scale), height: h }, paint);\n\npaint.setColor(Skia.Color('#38BDF8')); // Tech Cyber Cyan trim edge\ncanvas.drawRect({ x: 40 * scale, y: height - h - (40 * scale), width: 8 * scale, height: h }, paint);\n\npaint.setColor(Skia.Color('white'));\nconst titleFont = oswald;\ntitleFont.setSize(46 * scale); // Bold structural prominence\ndrawTextLeft(canvas, name.toUpperCase(), 75 * scale, height - h + (15 * scale), titleFont, paint, width - (140 * scale));\n\nif (email) {\n  paint.setColor(Skia.Color('#94A3B8'));\n  const subFont = regular;\n  subFont.setSize(20 * scale);\n  drawTextLeft(canvas, email.toLowerCase(), 75 * scale, height - (65 * scale), subFont, paint, width - (140 * scale));\n}\nreturn [\"name\", \"email\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeCenterCrosshair",
+        "name": "Center Crosshair",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "slogan"
+        ],
+        "code": "const { righteous, montserrat } = await loadFonts();\nconst { name, slogan } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst cx = width / 2;\nconst cy = height / 2;\n\npaint.setStyle(1);\npaint.setStrokeWidth(2 * scale);\npaint.setColor(Skia.Color('rgba(255, 255, 255, 0.25)'));\ncanvas.drawCircle(cx, cy, 140 * scale, paint);\n\n// Fine structural layout markings\ncanvas.drawLine(cx - (180 * scale), cy, cx - (100 * scale), cy, paint);\ncanvas.drawLine(cx + (100 * scale), cy, cx + (180 * scale), cy, paint);\n\npaint.setStyle(0);\npaint.setColor(Skia.Color('rgba(255, 255, 255, 0.8)'));\nconst titleFont = righteous;\ntitleFont.setSize(54 * scale); // Huge focused center identity\ndrawTextCentered(canvas, name.toUpperCase(), cy + (15 * scale), titleFont, paint, width, width - (60 * scale));\n\nif (slogan) {\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.4)'));\n  const subFont = montserrat;\n  subFont.setSize(18 * scale);\n  drawTextCentered(canvas, slogan.toUpperCase().split('').join(' '), cy + (55 * scale), subFont, paint, width, width - (60 * scale));\n}\nreturn [\"name\", \"slogan\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeVerticalRibbon",
+        "name": "Vertical Ribbon",
+        "type": "code",
+        "requiredFields": [
+            "name"
+        ],
+        "code": "const { condensed } = await loadFonts();\nconst { name } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst rw = 80 * scale;\npaint.setColor(Skia.Color('rgba(20, 20, 25, 0.88)'));\ncanvas.drawRect({ x: width - rw, y: 0, width: rw, height: height * 0.6 }, paint);\n\ncanvas.save();\ncanvas.translate(width - (rw / 2) + (10 * scale), 50 * scale);\ncanvas.rotate(90, 0, 0);\n\npaint.setColor(Skia.Color('white'));\nconst titleFont = condensed;\ntitleFont.setSize(38 * scale); // Vertical layout typography focus\ncanvas.drawText(name.toUpperCase(), 0, 0, paint, titleFont);\ncanvas.restore();\nreturn [\"name\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeAngularTech",
+        "name": "Angular Tech",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "website"
+        ],
+        "code": "const { oswald, regular } = await loadFonts();\nconst { name, website } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst h = 140 * scale;\npaint.setColor(Skia.Color('rgba(15, 23, 42, 0.92)'));\n\nconst path = Skia.Path.Make();\npath.moveTo(0, height);\npath.lineTo(width * 0.55, height);\npath.lineTo(width * 0.48, height - h);\npath.lineTo(0, height - h);\npath.close();\ncanvas.drawPath(path, paint);\n\npaint.setColor(Skia.Color('white'));\nconst titleFont = oswald;\ntitleFont.setSize(48 * scale); // Prominent scale tag look\ndrawTextLeft(canvas, name.toUpperCase(), 40 * scale, height - (h / 2) + (10 * scale), titleFont, paint, width * 0.4);\n\nif (website) {\n  paint.setColor(Skia.Color('#38BDF8'));\n  const subFont = regular;\n  subFont.setSize(20 * scale);\n  drawTextLeft(canvas, website.toLowerCase(), 40 * scale, height - 22 * scale, subFont, paint, width * 0.4);\n}\nreturn [\"name\", \"website\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeMicroPillTag",
+        "name": "Micro-Pill Tag",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "socialHandle"
+        ],
+        "code": "const { bold, regular, icons } = await loadFonts();\nconst { name, socialHandle } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst targetVal = socialHandle ? `@${socialHandle.replace('@','')}` : name;\nconst textFont = regular;\ntextFont.setSize(22 * scale);\nconst tw = textFont.getTextWidth(targetVal);\n\nconst pillW = tw + (100 * scale);\nconst pillH = 54 * scale;\nconst px = width - pillW - (40 * scale);\nconst py = 40 * scale;\n\npaint.setColor(Skia.Color('rgba(255, 255, 255, 0.96)'));\ncanvas.drawRRect(Skia.RRectXY({ x: px, y: py, width: pillW, height: pillH }, 27 * scale, 27 * scale), paint);\n\npaint.setColor(Skia.Color('#0F172A'));\nconst labelFont = bold;\nlabelFont.setSize(22 * scale);\ndrawIcon(canvas, 'logo-instagram', px + 24 * scale, py + 14 * scale, 24 * scale, paint, icons);\ncanvas.drawText(targetVal, px + (62 * scale), py + 36 * scale, paint, labelFont);\nreturn [\"name\", \"socialHandle\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeAuthenticScript",
+        "name": "Authentic Script",
+        "type": "code",
+        "requiredFields": [
+            "name"
+        ],
+        "code": "const { dancingScript } = await loadFonts();\nconst { name } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\npaint.setColor(Skia.Color('rgba(0, 0, 0, 0.4)')); // Shadow protection mask layer\nconst signFont = dancingScript;\nsignFont.setSize(75 * scale); // Elegant fluid structural prominence\n\ndrawTextCentered(canvas, name, height - (80 * scale) + 2, signFont, paint, width, width - (80 * scale));\npaint.setColor(Skia.Color('white'));\ndrawTextCentered(canvas, name, height - (80 * scale), signFont, paint, width, width - (80 * scale));\nreturn [\"name\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeStudioLayoutFrame",
+        "name": "Studio Layout Frame",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "website"
+        ],
+        "code": "const { serif, regular } = await loadFonts();\nconst { name, website } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst pad = 40 * scale;\npaint.setStyle(1);\npaint.setStrokeWidth(2 * scale);\npaint.setColor(Skia.Color('rgba(255, 255, 255, 0.3)'));\ncanvas.drawRect({ x: pad, y: pad, width: width - (pad * 2), height: height - (pad * 2) }, paint);\n\npaint.setStyle(0);\npaint.setColor(Skia.Color('white'));\nconst titleFont = serif;\ntitleFont.setSize(44 * scale); \nconst tw = titleFont.getTextWidth(name.toUpperCase());\n\n// Elegant cutout styling frame layout mask alternative\ncanvas.drawRect({ x: pad + (30 * scale), y: height - pad - (20 * scale), width: tw + (40 * scale), height: 40 * scale }, paint);\npaint.setColor(Skia.Color('#111111'));\ncanvas.drawText(name.toUpperCase(), pad + (50 * scale), height - pad, paint, titleFont);\nreturn [\"name\", \"website\"];",
+        "isPremium": false
+    },
+    {
+        "id": "themeCircularSeal",
+        "name": "Circular Seal",
+        "type": "code",
+        "requiredFields": [
+            "name",
+            "logoUri"
+        ],
+        "code": "const { regular } = await loadFonts();\nconst { name, logo } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\nconst r = 70 * scale;\nconst cx = width - r - (40 * scale);\nconst cy = height - r - (40 * scale);\n\npaint.setColor(Skia.Color('rgba(15, 23, 42, 0.88)'));\ncanvas.drawCircle(cx, cy, r, paint);\n\nif (logo) {\n  canvas.save();\n  const clip = Skia.Path.Make().addCircle(cx, cy, r - (8 * scale));\n  canvas.clipPath(clip, 1, true);\n  const { width: lW, height: lH } = getLogoDimensions(logo);\n  const s = Math.max((r * 2) / lW, (r * 2) / lH);\n  drawLogo(canvas, logo, cx - r, cy - r, lW * s, lH * s);\n  canvas.restore();\n}\nreturn [\"name\", \"logoUri\"];",
+        "isPremium": false
+    }
+]
