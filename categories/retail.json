@@ -69,17 +69,6 @@
     "isPremium": false
   },
   {
-    "id": "themeFlashSale",
-    "name": "Flash Sale",
-    "type": "code",
-    "requiredFields": [
-      "name",
-      "phone"
-    ],
-    "code": "const { bold, condensed, icons } = await loadFonts();\n  const { name, phone } = brandData;\n  const scale = getScale(width, height);\n\n  // 1. Slanted Ribbon Top Left\n  const paint = Skia.Paint();\n  paint.setColor(Skia.Color('#D50000')); // Red\n  \n  const path = Skia.Path.Make();\n  path.moveTo(0, 0);\n  path.lineTo(300 * scale, 0);\n  path.lineTo(0, 300 * scale);\n  path.close();\n  canvas.drawPath(path, paint);\n\n  paint.setColor(Skia.Color('white'));\n  const saleFont = condensed;\n  saleFont.setSize(45 * scale);\n  \n  canvas.save();\n  canvas.rotate(-45, 100*scale, 100*scale);\n  canvas.drawText(\"SALE\", 20*scale, 140*scale, paint, saleFont);\n  canvas.restore();\n\n  // 2. Bottom Bar\n  paint.setColor(Skia.Color('#D50000'));\n  canvas.drawRect({ x: 0, y: height - 120*scale, width, height: 120*scale }, paint);\n\n  // 3. Order Info\n  paint.setColor(Skia.Color('white'));\n  const phoneFont = bold;\n  phoneFont.setSize(50 * scale);\n  \n  drawIcon(canvas, 'logo-whatsapp', 50*scale, height - 85*scale, 45*scale, paint, icons);\n  drawTextLeft(canvas, phone, 110*scale, height - 45*scale, phoneFont, paint, width - (40 * scale));\n\n  // Brand Name Right\n  const nameFont = condensed;\n  nameFont.setSize(35 * scale);\n  const nw = nameFont.getTextWidth(name.toUpperCase());\n  drawTextLeft(canvas, name.toUpperCase(), width - nw - 40*scale, height - 50*scale, nameFont, paint, width - (40 * scale));\n\n  return [\"name\", \"phone\"];",
-    "isPremium": false
-  },
-  {
     "id": "themeProductDrop",
     "name": "Product Drop",
     "type": "code",
@@ -108,6 +97,52 @@
       "name"
     ],
     "code": "const { bold, regular } = await loadFonts();\n    const { name, logo } = brandData;\n    const scale = getScale(width, height);\n\n    // Draw white grid lines over photo to simulate collage\n    const paint = Skia.Paint();\n    paint.setColor(Skia.Color('white'));\n    paint.setStrokeWidth(10 * scale);\n    paint.setStyle(1); // Stroke\n    \n    // Cross\n    canvas.drawLine(width/2, 0, width/2, height, paint);\n    canvas.drawLine(0, height/2, width, height/2, paint);\n\n    // Center Badge\n    paint.setStyle(0); // Fill\n    canvas.drawCircle(width/2, height/2, 100*scale, paint);\n\n    // Logo in center\n    if (logo) {\n        const lSize = 120 * scale;\n        const { width: lW, height: lH } = getLogoDimensions(logo);\n        \n    canvas.save();\n    const _clip = Skia.Path.Make();\n    _clip.addRRect(Skia.RRectXY({x: (width-lSize)/2, y: (height-lSize)/2, width: lSize, height: lSize * (lH/lW)}, 15 * scale, 15 * scale));\n    canvas.clipPath(_clip, 1, true);\n    drawLogo(canvas, logo, (width-lSize)/2, (height-lSize)/2, lSize, lSize * (lH/lW))\n    canvas.restore();;\n    }\n\n    // Name at bottom\n    paint.setColor(Skia.Color('black'));\n    const f = bold;\n    f.setSize(40 * scale);\n    drawTextCentered(canvas, name.toUpperCase(), height - 50*scale, f, paint, width);\n\n    return [\"logoUri\", \"name\"];",
+    "isPremium": false
+  },
+  {
+    "id": "themeRetailGrandDisplay",
+    "name": "Grand Display",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "website"
+    ],
+    "code": "const { oswald, regular } = await loadFonts();\nconst { name, website, slogan } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\n// 1. Asymmetric multi-stop protection gradient block on the right half of the image\nconst gradientPaint = Skia.Paint();\nconst colors = [Skia.Color('transparent'), Skia.Color('rgba(10, 10, 12, 0.4)'), Skia.Color('rgba(10, 10, 12, 0.95)')];\ngradientPaint.setShader(Skia.Shader.MakeLinearGradient(\n  { x: width * 0.4, y: 0 },\n  { x: width, y: 0 },\n  colors,\n  [0, 0.35, 1],\n  0\n));\ncanvas.drawRect({ x: width * 0.4, y: 0, width: width * 0.6, height }, gradientPaint);\n\n// 2. Vertical architectural accent layout (Champagne Gold marker line)\npaint.setColor(Skia.Color('#D4AF37'));\ncanvas.drawRect({ x: width - (30 * scale), y: 60 * scale, width: 4 * scale, height: height - (120 * scale) }, paint);\n\n// 3. MASSIVE structural brand heading rotated vertically on the side for ultimate catalog look\ncanvas.save();\ncanvas.translate(width - (65 * scale), height - (80 * scale));\ncanvas.rotate(-90, 0, 0);\n\npaint.setColor(Skia.Color('white'));\nconst titleFont = oswald;\ntitleFont.setSize(72 * scale); // Prominent flagship-tier lettering\ncanvas.drawText(name.toUpperCase(), 0, 0, paint, titleFont);\ncanvas.restore();\n\n// 4. Clean baseline digital metadata track (Bottom Right)\nif (website) {\n  paint.setColor(Skia.Color('#A1A1AA'));\n  const webFont = regular;\n  webFont.setSize(22 * scale);\n  const textW = webFont.getTextWidth(website.toLowerCase());\n  drawTextLeft(canvas, website.toLowerCase(), width - textW - (90 * scale), height - (80 * scale), webFont, paint, width * 0.4);\n}\n\nreturn [\"name\", \"website\"];",
+    "isPremium": false
+  },
+  {
+    "id": "themeGlassmorphicStorefront",
+    "name": "Glassmorphic Storefront",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "address",
+      "phone"
+    ],
+    "code": "const { righteous, montserrat, icons } = await loadFonts();\nconst { name, address, phone, logo } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\n// 1. Premium floating glassmorphic container box anchored securely at the bottom\nconst cardW = width - (80 * scale);\nconst cardH = 170 * scale;\nconst cardX = 40 * scale;\nconst cardY = height - cardH - (50 * scale);\nconst radius = 24 * scale;\n\n// Intentionally soft, diffuse dropshadow for premium structural depth\npaint.setColor(Skia.Color('black'));\npaint.setAlphaf(0.15);\ncanvas.drawRRect(Skia.RRectXY({ x: cardX, y: cardY + (6 * scale), width: cardW, height: cardH }, radius, radius), paint);\n\n// Main Frosted Glass ultra-opaque white canvas backing\npaint.setColor(Skia.Color('white'));\npaint.setAlphaf(0.95);\ncanvas.drawRRect(Skia.RRectXY({ x: cardX, y: cardY, width: cardW, height: cardH }, radius, radius), paint);\n\nlet contentX = cardX + (40 * scale);\n\n// 2. High-precision circular mask ring clip for official retail logo asset\nif (logo) {\n  const lSize = 90 * scale;\n  const lY = cardY + (cardH - lSize) / 2;\n  \n  paint.setColor(Skia.Color('#1E293B')); // Premium deep slate border mask\n  paint.setAlphaf(1);\n  canvas.drawCircle(contentX + lSize / 2, lY + lSize / 2, lSize / 2 + 3 * scale, paint);\n\n  canvas.save();\n  const clip = Skia.Path.Make().addCircle(contentX + lSize / 2, lY + lSize / 2, lSize / 2);\n  canvas.clipPath(clip, 1, true);\n  \n  const { width: lW, height: lH } = getLogoDimensions(logo);\n  const s = Math.max(lSize / lW, lSize / lH);\n  drawLogo(canvas, logo, contentX - ((lW * s) - lSize) / 2, lY - ((lH * s) - lSize) / 2, lW * s, lH * s);\n  canvas.restore();\n  \n  contentX += lSize + (30 * scale);\n}\n\n// 3. Ultra-Loud Contemporary Display Typography (Righteous)\npaint.setColor(Skia.Color('#1E293B'));\npaint.setAlphaf(1);\nconst titleFont = righteous;\ntitleFont.setSize(46 * scale); // Prominent business naming scale\ndrawTextLeft(canvas, name, contentX, cardY + 60 * scale, titleFont, paint, cardW - (contentX - cardX) - (30 * scale));\n\n// 4. Micro-aligned store grid directory text data\npaint.setColor(Skia.Color('#475569'));\nconst directoryFont = montserrat;\ndirectoryFont.setSize(22 * scale);\n\nif (address) {\n  drawIcon(canvas, 'location', contentX, cardY + 90 * scale, 22 * scale, paint, icons);\n  drawTextLeft(canvas, address, contentX + (32 * scale), cardY + 110 * scale, directoryFont, paint, cardW - 150 * scale);\n}\n\ndrawIcon(canvas, 'call', contentX, cardY + 125 * scale, 22 * scale, paint, icons);\ndrawTextLeft(canvas, `ORDER: ${phone}`, contentX + (32 * scale), cardY + 145 * scale, directoryFont, paint, cardW - 150 * scale);\n\nreturn [\"name\", \"address\", \"phone\"];",
+    "isPremium": false
+  },
+  {
+    "id": "themeRetailMinimalOnyx",
+    "name": "Minimal Onyx",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "email",
+      "website"
+    ],
+    "code": "const { serif, regular } = await loadFonts();\nconst { name, email, website } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\n// 1. Sleek geometric studio label plate layout (Centered Top Header alignment)\nconst boxW = width - (100 * scale);\nconst boxH = 150 * scale;\nconst bx = 50 * scale;\nconst by = 50 * scale;\n\npaint.setColor(Skia.Color('rgba(18, 18, 20, 0.96)')); // Sharp premium solid onyx box block layer\ncanvas.drawRRect(Skia.RRectXY({ x: bx, y: by, width: boxW, height: boxH }, 14 * scale, 14 * scale), paint);\n\n// 2. Extra Prominent Luxurious Retail Brand Header (Serif execution style)\npaint.setColor(Skia.Color('white'));\nconst titleFont = serif;\ntitleFont.setSize(52 * scale); // Maximum premium editorial emphasis scaling\ndrawTextCentered(canvas, name.toUpperCase(), by + 65 * scale, titleFont, paint, width, boxW - (40 * scale));\n\n// Fine luxury architectural spacing track line divider\npaint.setColor(Skia.Color('rgba(255, 255, 255, 0.18)'));\ncanvas.drawRect({ x: bx + (80 * scale), y: by + 95 * scale, width: boxW - (160 * scale), height: 1.5 * scale }, paint);\n\n// 3. Elegant baseline communication footer data links\npaint.setColor(Skia.Color('#A1A1AA'));\nconst detailsFont = regular;\ndetailsFont.setSize(20 * scale);\n\nconst compositeString = `${email || ''}    •    ${website || ''}`;\nif (compositeString.trim() !== '•') {\n  drawTextCentered(canvas, compositeString.toLowerCase(), by + 130 * scale, detailsFont, paint, width, boxW - (40 * scale));\n}\n\nreturn [\"name\", \"email\", \"website\"];",
+    "isPremium": false
+  },
+  {
+    "id": "themeFlagshipBoutique",
+    "name": "Flagship Boutique",
+    "type": "code",
+    "requiredFields": [
+      "name",
+      "socialHandle"
+    ],
+    "code": "const { bold, oswald, icons } = await loadFonts();\nconst { name, socialHandle } = brandData;\nconst scale = getScale(width, height);\nconst paint = Skia.Paint();\n\n// 1. Streamlined full-width solid baseline footer ribbon strip\nconst stripH = 115 * scale;\npaint.setColor(Skia.Color('rgba(15, 15, 18, 0.85)'));\ncanvas.drawRect({ x: 0, y: height - stripH, width, height: stripH }, paint);\n\n// 2. Giant prominent layout structural lettering block (Bold Type)\npaint.setColor(Skia.Color('white'));\nconst titleFont = bold;\ntitleFont.setSize(42 * scale); // Prominent lettering layout choice\ndrawTextLeft(canvas, name, 40 * scale, height - (stripH / 2) + (14 * scale), titleFont, paint, width * 0.5);\n\n// 3. Cyber-clean premium asset capsule badge anchor (Floating Right edge aligned)\nif (socialHandle) {\n  const badgeW = 280 * scale;\n  const badgeH = 54 * scale;\n  const badgeX = width - badgeW - (40 * scale);\n  const badgeY = height - (stripH / 2) - (badgeH / 2);\n  \n  // Emerald conversion clean green retail indicator highlight\n  paint.setColor(Skia.Color('#10B981'));\n  canvas.drawRRect(Skia.RRectXY({ x: badgeX, y: badgeY, width: badgeW, height: badgeH }, 27 * scale, 27 * scale), paint);\n  \n  paint.setColor(Skia.Color('white'));\n  const subFont = oswald;\n  subFont.setSize(24 * scale); // Crisp, bold tag sizing scaling\n  drawIcon(canvas, 'logo-instagram', badgeX + 22 * scale, badgeY + 13 * scale, 26 * scale, paint, icons);\n  drawTextCentered(canvas, socialHandle.toUpperCase(), badgeY + 36 * scale, subFont, paint, width, badgeW - 50 * scale);\n}\n\nreturn [\"name\", \"socialHandle\"];",
     "isPremium": false
   }
 ]
