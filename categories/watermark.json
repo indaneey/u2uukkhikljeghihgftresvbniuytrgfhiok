@@ -118,43 +118,43 @@
         "isPremium": false
     },
     {
-        "id": "themeCleanLogoCenterTop",
-        "name": "Clean Logo Center (Top)",
+        "id": "themeCleanLogoNameTop",
+        "name": "Clean Logo & Name (Top)",
         "type": "code",
         "requiredFields": [
             "name"
         ],
-        "code": "const { bold } = await loadFonts();\nconst { name, logo } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('rgba(0, 0, 0, 0.4)'), Skia.Color('transparent')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: 0 },\n  { x: 0, y: 180 * scale },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: 0, width, height: 180 * scale }, paint);\npaint.setShader(null);\n\nif (logo) {\n  const { width: lW, height: lH } = getLogoDimensions(logo);\n  const targetH = 80 * scale;\n  const targetW = lW * (targetH / lH);\n  const lx = (width - targetW) / 2;\n  const ly = 45 * scale;\n  drawLogo(canvas, logo, lx, ly, targetW, targetH);\n} else {\n  paint.setColor(Skia.Color('white'));\n  const font = bold;\n  font.setSize(38 * scale);\n  drawTextCentered(canvas, name.toUpperCase(), 95 * scale, font, paint, width);\n}\nreturn [\"name\"];",
+        "code": "const { bold, regular } = await loadFonts();\nconst { name, logo, slogan } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('rgba(0,0,0,0.45)'), Skia.Color('transparent')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: 0 },\n  { x: 0, y: 240 * scale },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: 0, width, height: 240 * scale }, paint);\npaint.setShader(null);\n\nlet currentY = 40 * scale;\n\nif (logo) {\n  const { width: lW, height: lH } = getLogoDimensions(logo);\n  const targetH = 80 * scale;\n  const targetW = lW * (targetH / lH);\n  const lx = (width - targetW) / 2;\n  drawLogo(canvas, logo, lx, currentY, targetW, targetH);\n  currentY += targetH + (18 * scale);\n}\n\npaint.setColor(Skia.Color('white'));\nconst font = bold;\nfont.setSize(34 * scale);\ndrawTextCentered(canvas, name.toUpperCase(), currentY + (28 * scale), font, paint, width);\ncurrentY += 40 * scale;\n\nif (slogan) {\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.75)'));\n  const subFont = regular;\n  subFont.setSize(18 * scale);\n  drawTextCentered(canvas, slogan.toUpperCase(), currentY + (14 * scale), subFont, paint, width);\n}\nreturn [\"name\"];",
         "isPremium": false
     },
     {
-        "id": "themeCleanLogoCenterBottom",
-        "name": "Clean Logo Center (Bottom)",
+        "id": "themeCleanLogoNameBottom",
+        "name": "Clean Logo & Name (Bottom)",
         "type": "code",
         "requiredFields": [
             "name"
         ],
-        "code": "const { bold } = await loadFonts();\nconst { name, logo } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('transparent'), Skia.Color('rgba(0, 0, 0, 0.45)')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: height - (180 * scale) },\n  { x: 0, y: height },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: height - (180 * scale), width, height: 180 * scale }, paint);\npaint.setShader(null);\n\nif (logo) {\n  const { width: lW, height: lH } = getLogoDimensions(logo);\n  const targetH = 80 * scale;\n  const targetW = lW * (targetH / lH);\n  const lx = (width - targetW) / 2;\n  const ly = height - targetH - (45 * scale);\n  drawLogo(canvas, logo, lx, ly, targetW, targetH);\n} else {\n  paint.setColor(Skia.Color('white'));\n  const font = bold;\n  font.setSize(38 * scale);\n  drawTextCentered(canvas, name.toUpperCase(), height - (65 * scale), font, paint, width);\n}\nreturn [\"name\"];",
+        "code": "const { bold, regular } = await loadFonts();\nconst { name, logo, slogan } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('transparent'), Skia.Color('rgba(0,0,0,0.45)')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: height - (240 * scale) },\n  { x: 0, y: height },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: height - (240 * scale), width, height: 240 * scale }, paint);\npaint.setShader(null);\n\nlet totalH = 40 * scale;\nif (logo) totalH += 80 * scale + 18 * scale;\ntotalH += 34 * scale;\nif (slogan) totalH += 18 * scale + 14 * scale;\n\nlet currentY = height - totalH - (30 * scale);\n\nif (logo) {\n  const { width: lW, height: lH } = getLogoDimensions(logo);\n  const targetH = 80 * scale;\n  const targetW = lW * (targetH / lH);\n  const lx = (width - targetW) / 2;\n  drawLogo(canvas, logo, lx, currentY, targetW, targetH);\n  currentY += targetH + (18 * scale);\n}\n\npaint.setColor(Skia.Color('white'));\nconst font = bold;\nfont.setSize(34 * scale);\ndrawTextCentered(canvas, name.toUpperCase(), currentY + (28 * scale), font, paint, width);\ncurrentY += 40 * scale;\n\nif (slogan) {\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.75)'));\n  const subFont = regular;\n  subFont.setSize(18 * scale);\n  drawTextCentered(canvas, slogan.toUpperCase(), currentY + (14 * scale), subFont, paint, width);\n}\nreturn [\"name\"];",
         "isPremium": false
     },
     {
-        "id": "themeCleanClassicTextTop",
-        "name": "Clean Classic Text (Top)",
+        "id": "themeCleanDetailsTop",
+        "name": "Clean Details (Top)",
         "type": "code",
         "requiredFields": [
             "name"
         ],
-        "code": "const { serif } = await loadFonts();\nconst { name } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('rgba(0, 0, 0, 0.4)'), Skia.Color('transparent')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: 0 },\n  { x: 0, y: 150 * scale },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: 0, width, height: 150 * scale }, paint);\npaint.setShader(null);\n\npaint.setColor(Skia.Color('white'));\nconst font = serif;\nfont.setSize(36 * scale);\ndrawTextCentered(canvas, name.toUpperCase(), 90 * scale, font, paint, width);\nreturn [\"name\"];",
+        "code": "const { bold, regular } = await loadFonts();\nconst { name, website, phone, socialHandle } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('rgba(0, 0, 0, 0.45)'), Skia.Color('transparent')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: 0 },\n  { x: 0, y: 220 * scale },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: 0, width, height: 220 * scale }, paint);\npaint.setShader(null);\n\nlet currentY = 80 * scale;\n\npaint.setColor(Skia.Color('white'));\nconst font = bold;\nfont.setSize(40 * scale);\ndrawTextCentered(canvas, name.toUpperCase(), currentY, font, paint, width);\ncurrentY += 40 * scale;\n\nconst details = [];\nif (phone) details.push(phone);\nif (website) details.push(website.toLowerCase());\nif (socialHandle) details.push(\"@\" + socialHandle.replace(\"@\",\"\"));\n\nif (details.length > 0) {\n  const subText = details.join(\"  \u2022  \");\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.75)'));\n  const subFont = regular;\n  subFont.setSize(20 * scale);\n  drawTextCentered(canvas, subText, currentY + (10 * scale), subFont, paint, width);\n}\nreturn [\"name\"];",
         "isPremium": false
     },
     {
-        "id": "themeCleanClassicTextBottom",
-        "name": "Clean Classic Text (Bottom)",
+        "id": "themeCleanDetailsBottom",
+        "name": "Clean Details (Bottom)",
         "type": "code",
         "requiredFields": [
             "name"
         ],
-        "code": "const { serif } = await loadFonts();\nconst { name } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('transparent'), Skia.Color('rgba(0, 0, 0, 0.45)')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: height - (150 * scale) },\n  { x: 0, y: height },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: height - (150 * scale), width, height: 150 * scale }, paint);\npaint.setShader(null);\n\npaint.setColor(Skia.Color('white'));\nconst font = serif;\nfont.setSize(36 * scale);\ndrawTextCentered(canvas, name.toUpperCase(), height - (65 * scale), font, paint, width);\nreturn [\"name\"];",
+        "code": "const { bold, regular } = await loadFonts();\nconst { name, website, phone, socialHandle } = brandData;\nconst scale = getScale(width, height);\n\nconst paint = Skia.Paint();\nconst colors = [Skia.Color('transparent'), Skia.Color('rgba(0, 0, 0, 0.45)')];\nconst shader = Skia.Shader.MakeLinearGradient(\n  { x: 0, y: height - (220 * scale) },\n  { x: 0, y: height },\n  colors,\n  [0, 1],\n  0\n);\npaint.setShader(shader);\ncanvas.drawRect({ x: 0, y: height - (220 * scale), width, height: 220 * scale }, paint);\npaint.setShader(null);\n\nlet currentY = height - (55 * scale);\n\nconst details = [];\nif (phone) details.push(phone);\nif (website) details.push(website.toLowerCase());\nif (socialHandle) details.push(\"@\" + socialHandle.replace(\"@\",\"\"));\n\nif (details.length > 0) {\n  const subText = details.join(\"  \u2022  \");\n  paint.setColor(Skia.Color('rgba(255, 255, 255, 0.75)'));\n  const subFont = regular;\n  subFont.setSize(20 * scale);\n  drawTextCentered(canvas, subText, currentY, subFont, paint, width);\n  currentY -= 40 * scale;\n}\n\npaint.setColor(Skia.Color('white'));\nconst font = bold;\nfont.setSize(40 * scale);\ndrawTextCentered(canvas, name.toUpperCase(), currentY, font, paint, width);\nreturn [\"name\"];",
         "isPremium": false
     }
 ]
